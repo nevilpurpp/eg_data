@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="586279ac-6cf0-4c9b-9b80-56a46d5feeed" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/../app/app/src/main/java/com/coelib/egerton_university_app/screens/settings/SettingScreen.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/eg_data.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/git_toolbox_blame.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/app/src/main/java/com/coelib/egerton_university_app/MainActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../app/app/src/main/java/com/coelib/egerton_university_app/MainActivity.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/app/src/main/java/com/coelib/egerton_university_app/components/ThemeSwitcher.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../app/app/src/main/java/com/coelib/egerton_university_app/components/ThemeSwitcher.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/app/src/main/java/com/coelib/egerton_university_app/components/bottombar/BottomBar.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../app/app/src/main/java/com/coelib/egerton_university_app/components/bottombar/BottomBar.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/app/src/main/java/com/coelib/egerton_university_app/routes/NavigationGraph.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../app/app/src/main/java/com/coelib/egerton_university_app/routes/NavigationGraph.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/app/src/main/java/com/coelib/egerton_university_app/routes/Routes.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../app/app/src/main/java/com/coelib/egerton_university_app/routes/Routes.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/app/src/main/java/com/coelib/egerton_university_app/screens/App.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../app/app/src/main/java/com/coelib/egerton_university_app/screens/App.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/app/src/main/java/com/coelib/egerton_university_app/screens/home/HomeScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../app/app/src/main/java/com/coelib/egerton_university_app/screens/home/HomeScreen.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/app/src/main/java/com/coelib/egerton_university_app/screens/location/LocationScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../app/app/src/main/java/com/coelib/egerton_university_app/screens/location/LocationScreen.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/app/src/main/java/com/coelib/egerton_university_app/screens/news/NewsScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../app/app/src/main/java/com/coelib/egerton_university_app/screens/news/NewsScreen.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../data/app.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../data/scraper.py" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 2
+}]]></component>
+  <component name="ProjectId" id="2mShFz1oQePrgIxiruSQvbenG32" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "master"
+  }
+}]]></component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-python-sdk-98f27166c754-ba05f1cad1b1-com.jetbrains.pycharm.community.sharedIndexes.bundled-PC-242.21829.153" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="586279ac-6cf0-4c9b-9b80-56a46d5feeed" name="Changes" comment="" />
+      <created>1727075785331</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1727075785331</updated>
+    </task>
+    <servers />
+  </component>
+</project>
