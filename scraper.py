@@ -59,8 +59,8 @@ def scraper():
         cur.execute('''CREATE TABLE IF NOT EXISTS recent_egerton_news (
                         id INTEGER PRIMARY KEY, 
                         Title TEXT,
-                        Image_url STRING,
                         Link STRING,
+                        Image_url STRING,
                         Date CHAR(50)
                        )''')
 
@@ -91,10 +91,11 @@ def scraper():
             intro = article.find('div', class_='ma-introtext').text.strip()
 
             news_titles.append(title)
+            news_intros.append(intro)
             news_links.append(link)
             news_images.append(image)
             news_dates.append(date)
-            news_intros.append(intro)
+            
 
 
 
