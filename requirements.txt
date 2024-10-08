@@ -1,6 +1,6 @@
-Flask
-beautifulsoup4
-Pillow
-requests
-urllib3
-
+beautifulsoup4==4.12.2
+Pillow==9.5.0
+requests==2.31.0
+flask
+pandas
+gunicorn
