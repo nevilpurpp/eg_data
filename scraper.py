@@ -86,6 +86,7 @@ def scraper():
             # Handle None values for image
             image_tag = article.find('div', class_='ma-image').find('img')
             image = image_tag['src'].strip() if image_tag else None
+            image = "https://www.egerton.ac.ke" + image
 
             date = article.find('div', class_='ma-date').find('time').text.strip()
             intro = article.find('div', class_='ma-introtext').text.strip()
