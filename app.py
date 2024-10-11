@@ -1,5 +1,6 @@
 from flask import Flask, jsonify
 from scraper import db_connection
+from fcm_server import send_recent_news_notification
 
 
 app = Flask(__name__)
@@ -77,6 +78,11 @@ def get_noticeboard():
 
 # Todo:: route to access download links
 #@app.route('/api/download-links')
+
+@app.route('/api/send_recent_news', methods=['POST'])
+def trigger_notification():
+    send_recent_news_notification()
+    return jsonify({'message': 'Notification sent successfully'})
 
 # Default route
 @app.route('/')
