@@ -3,9 +3,9 @@ from scraper import db_connection
 
 
 app = Flask(__name__)
+application = app
 
-
-# Route to access news data
+#route to access news
 @app.route('/api/news', methods=['GET'])
 def get_news():
     conn = db_connection()
@@ -13,42 +13,47 @@ def get_news():
     cur.execute("SELECT * FROM egerton_news")
     rows = cur.fetchall()
 
-    # list of dictionaries to return as JSON
+
     news = []
     for row in rows:
         news.append({
             'id': row[0],
             'Title': row[1],
-            'Image_url': row[2],
+            'Intro': row[2],
+            'Image_url': row[3],
+            'Link': row[4],
+            'Date': row[5]
+        })
+    conn.close()
+    return jsonify(news)    
+
+
+
+# Route to access recent news
+@app.route('/api/recent_news', methods=['GET'])
+def get_recent_news():
+    conn = db_connection()
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM recent_egerton_news")
+    rows = cur.fetchall()
+
+    
+    recent_news = []
+    for row in rows:
+        recent_news.append({
+            'id': row[0],
+            'Title': row[1],
             'Link': row[3],
+            'Image_url': row[2],
             'Date': row[4]
         })
 
     conn.close()
-    return jsonify(news)
+    return jsonify(recent_news)
 
 
-# Route to access quick links data
-@app.route('/api/quick-links', methods=['GET'])
-def get_quick_links():
-    conn = db_connection()
-    cur = conn.cursor()
-    cur.execute("SELECT * FROM quick_links")
-    rows = cur.fetchall()
 
-    # Create a list of dictionaries to return as JSON
-    quick_links = []
-    for row in rows:
-        quick_links.append({
-            'id': row[0],
-            'Title': row[1],
-            'Link': row[2]
-        })
-
-    conn.close()
-    return jsonify(quick_links)
-
-
+#route to access noticeboard
 
 @app.route('/api/noticeboard', methods=['GET'])
 def get_noticeboard():
@@ -70,6 +75,8 @@ def get_noticeboard():
     conn.close()
     return jsonify(noticeboard)
 
+# Todo:: route to access download links
+#@app.route('/api/download-links')
 
 # Default route
 @app.route('/')
@@ -78,4 +85,4 @@ def index():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run()

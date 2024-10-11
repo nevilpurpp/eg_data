@@ -59,8 +59,8 @@ def scraper():
         cur.execute('''CREATE TABLE IF NOT EXISTS recent_egerton_news (
                         id INTEGER PRIMARY KEY, 
                         Title TEXT,
-                        Image_url STRING,
                         Link STRING,
+                        Image_url STRING,
                         Date CHAR(50)
                        )''')
 
@@ -86,15 +86,17 @@ def scraper():
             # Handle None values for image
             image_tag = article.find('div', class_='ma-image').find('img')
             image = image_tag['src'].strip() if image_tag else None
+            img2 = "https://www.egerton.ac.ke" + image
 
             date = article.find('div', class_='ma-date').find('time').text.strip()
             intro = article.find('div', class_='ma-introtext').text.strip()
 
             news_titles.append(title)
-            news_links.append(link)
-            news_images.append(image)
-            news_dates.append(date)
             news_intros.append(intro)
+            news_links.append(link)
+            news_images.append(img2)
+            news_dates.append(date)
+            
 
 
 
