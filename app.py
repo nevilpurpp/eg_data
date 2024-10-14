@@ -1,6 +1,6 @@
 from flask import Flask, jsonify
 from scraper import db_connection
-from fcm_server import send_recent_news_notification
+from fcm_server import trigger_new_notification
 
 
 app = Flask(__name__)
