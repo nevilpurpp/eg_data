@@ -27,6 +27,7 @@ def trigger_new_notification():
             data={
                 'Title': title,
                 'Intro': truncated_intro,
+                'MessageId': '1234'  
             },
             topic='notify',
         )
