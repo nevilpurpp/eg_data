@@ -3,12 +3,16 @@ from bs4 import BeautifulSoup
 import pandas as pd
 import sqlite3
 import os
+import datetime
 
+ currentDateTime = datetime.datetime.now()
 # Database connection
 def db_connection():
     conn = None
     try:
-        conn = sqlite3.connect('egerton_db.db')
+        conn = sqlite3.connect('egerton_db.db',
+                
+                              )
         return conn
     except sqlite3.Error as e:
         print("Error while connecting to SQLite database:", e)
@@ -16,6 +20,7 @@ def db_connection():
 
 # Main scraper function
 def scraper():
+ 
     conn = db_connection()
     if conn is None:
         print("Failed to create database connection.")
@@ -25,6 +30,7 @@ def scraper():
 
     # Scrape recent news
     def recent_news():
+        
         url = "https://www.egerton.ac.ke/"
         response = requests.get(url)
         soup = BeautifulSoup(response.content, 'html.parser')
@@ -38,22 +44,26 @@ def scraper():
         for highlight in news_highlights:
             articles = highlight.find_all('div', itemscope=True, itemtype="http://schema.org/Article")
             for article in articles:
+                
                 title = article.find('span', class_='latest-articles-title').text.strip()
                 link = article.find('a', class_='latest-news-title')['href'].strip()
                 image = article.find('img', class_='lazyload')['data-src'].strip()
-                date = article.find('span', class_='sppb-articles-carousel-meta-date').text.strip() if article.find('span',
-                                                                                                                class_='sppb-articles-carousel-meta-date') else None
-
+                date = article.find('span', class_='sppb-articles-carousel-meta-date').text.strip() if article.find('span', class_='sppb-articles-carousel-meta-date') else None
+                currentDateTime = datetime.datetime.now()
+            
                 news_titles.append(title)
                 news_links.append(link)
                 news_images.append(image)
                 news_dates.append(date)
+                news_updated_date.append(currentDateTime)
+                
 
         news_df = pd.DataFrame({
             'Title': news_titles,
             'Link': news_links,
             'Image_url': news_images,
-            'Date': news_dates
+            'Date': news_dates,
+            'updatedDate': news_updated_date
         })
 
         cur.execute('''CREATE TABLE IF NOT EXISTS recent_egerton_news (
@@ -61,11 +71,12 @@ def scraper():
                         Title TEXT,
                         Link STRING,
                         Image_url STRING,
-                        Date CHAR(50)
+                        Date CHAR(50),
+                        updatedDate TIMESTAMP
                        )''')
 
         
-        news_df.to_sql('recent_egerton_news', conn, if_exists='append', index=False)
+        news_df.to_sql('recent_egerton_news', currentDateTime conn,  if_exists='append', index=False)
 
     
     def news(url):
