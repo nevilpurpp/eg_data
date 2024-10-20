@@ -5,7 +5,7 @@ import sqlite3
 import os
 import datetime
 
-currentDateTime = datetime.datetime.now()
+
 # Database connection
 def db_connection():
     conn = None
@@ -76,7 +76,7 @@ def scraper():
                        )''')
 
         
-        news_df.to_sql('recent_egerton_news', currentDateTime conn,  if_exists='append', index=False)
+        news_df.to_sql('recent_egerton_news',  conn,  if_exists='append', index=False)
 
     
     def news(url):
@@ -101,12 +101,15 @@ def scraper():
 
             date = article.find('div', class_='ma-date').find('time').text.strip()
             intro = article.find('div', class_='ma-introtext').text.strip()
+            currentDateTime = datetime.datetime.now()
+            
 
             news_titles.append(title)
             news_intros.append(intro)
             news_links.append(link)
             news_images.append(img2)
             news_dates.append(date)
+            news_updated_date.append(currentDateTime)
             
 
 
@@ -117,7 +120,8 @@ def scraper():
             'Intro': news_intros,
             'Link': news_links,
             'Image_url': news_images,
-            'Date': news_dates
+            'Date': news_dates,
+            'UpdatedDate': news_updated_date
         })
 
         cur.execute('''CREATE TABLE IF NOT EXISTS egerton_news (
@@ -126,7 +130,8 @@ def scraper():
                         Intro TEXT,
                         Image_url STRING,
                         Link STRING,
-                        Date CHAR(50)
+                        Date CHAR(50),
+                        UpdatedDate TIMESTAMP
                        )''')
 
         # Save other news to the database
