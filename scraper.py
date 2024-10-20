@@ -5,7 +5,7 @@ import sqlite3
 import os
 import datetime
 
- currentDateTime = datetime.datetime.now()
+currentDateTime = datetime.datetime.now()
 # Database connection
 def db_connection():
     conn = None
