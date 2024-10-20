@@ -5,7 +5,7 @@ import sqlite3
 import os
 import datetime
 import schedule
-
+import time
 
 # Database connection
 def db_connection():
@@ -72,8 +72,7 @@ def scraper():
                         Title TEXT,
                         Link STRING,
                         Image_url STRING,
-                        Date CHAR(50),
-                       
+                        Date CHAR(50)
                        )''')
 
         
@@ -211,5 +210,9 @@ def scraper():
     conn.commit()
     conn.close()
 
+schedule.every(1).minutes.do(scraper)
+while True:
+    schedule.run_pending()
+    time.sleep(20)
 
-scraper()
+
