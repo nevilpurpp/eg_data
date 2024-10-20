@@ -49,13 +49,13 @@ def scraper():
                 link = article.find('a', class_='latest-news-title')['href'].strip()
                 image = article.find('img', class_='lazyload')['data-src'].strip()
                 date = article.find('span', class_='sppb-articles-carousel-meta-date').text.strip() if article.find('span', class_='sppb-articles-carousel-meta-date') else None
-                currentDateTime = datetime.datetime.now()
+              
             
                 news_titles.append(title)
                 news_links.append(link)
                 news_images.append(image)
                 news_dates.append(date)
-                news_updated_date.append(currentDateTime)
+               )
                 
 
         news_df = pd.DataFrame({
@@ -63,7 +63,7 @@ def scraper():
             'Link': news_links,
             'Image_url': news_images,
             'Date': news_dates,
-            'updatedDate': news_updated_date
+           
         })
 
         cur.execute('''CREATE TABLE IF NOT EXISTS recent_egerton_news (
@@ -72,7 +72,7 @@ def scraper():
                         Link STRING,
                         Image_url STRING,
                         Date CHAR(50),
-                        updatedDate TIMESTAMP
+                       
                        )''')
 
         
@@ -89,6 +89,7 @@ def scraper():
         news_images = []
         news_dates = []
         news_intros = []
+        news_updated_date = []
 
         for article in news_articles:
             title = article.find('h3', class_='w357ui-margin-small-bottom ma-title').find('a').text.strip()
