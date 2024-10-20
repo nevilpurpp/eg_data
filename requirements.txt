@@ -5,3 +5,4 @@ flask
 pandas
 gunicorn
 firebase-admin
+schedule
