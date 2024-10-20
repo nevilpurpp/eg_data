@@ -4,6 +4,7 @@ import pandas as pd
 import sqlite3
 import os
 import datetime
+import schedule
 
 
 # Database connection
@@ -55,7 +56,7 @@ def scraper():
                 news_links.append(link)
                 news_images.append(image)
                 news_dates.append(date)
-               )
+               
                 
 
         news_df = pd.DataFrame({
