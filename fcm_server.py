@@ -1,6 +1,8 @@
 import firebase_admin
 from firebase_admin import credentials, messaging
 from scraper import db_connection
+import schedule
+import time
 
 firebase_credentials_path = "/etc/secrets/egertonapp-firebase-adminsdk-sghjd-ab5f380ca5.json"
 cred = credentials.Certificate(firebase_credentials_path)
@@ -39,6 +41,9 @@ def trigger_new_notification():
         print("No recent news available.")
     
     conn.close()
+schedule.every(2).minutes.do(trigger_new_notification)
+while True:
+    schedule.run_pending()
+    time.sleep(30)
 
-trigger_new_notification()
 
