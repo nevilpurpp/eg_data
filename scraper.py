@@ -124,7 +124,7 @@ def scraper():
             'Date': news_dates,
             'UpdatedDate': news_updated_date
         })
-       cur.execute("DROP TABLE egerton_news")
+        cur.execute("DROP TABLE egerton_news")
         cur.execute('''CREATE TABLE IF NOT EXISTS egerton_news (
                         id INTEGER PRIMARY KEY, 
                         Title TEXT,
