@@ -37,7 +37,7 @@ def scraper():
         soup = BeautifulSoup(response.content, 'html.parser')
 
         news_highlights = soup.find_all('div', class_='latest-articles')
-        news_titles = []
+    `        news_titles = []
         news_links = []
         news_images = []
         news_dates = []
@@ -72,7 +72,8 @@ def scraper():
                         Title TEXT,
                         Link STRING,
                         Image_url STRING,
-                        Date CHAR(50)
+                        Date CHAR(50),
+                        UNIQUE ( id, Title, Intro, Image_url, Link, Date) ON CONFLICT IGNORE
                        )''')
 
         
@@ -132,7 +133,8 @@ def scraper():
                         Image_url STRING,
                         Link STRING,
                         Date CHAR(50),
-                        UpdatedDate TIMESTAMP
+                        UpdatedDate TIMESTAMP,
+                        UNIQUE ( id, Title, Intro, Image_url, Link, Date, UpdatedDate) ON CONFLICT IGNORE
                        )''')
 
         # Save other news to the database
@@ -195,7 +197,8 @@ def scraper():
                   id INTEGER PRIMARY KEY,
                   Title TEXT,
                   Date CHAR(50),
-                  Article TEXT
+                  Article TEXT,
+                  UNIQUE ( id, Title, Date, Article) ON CONFLICT IGNORE
               )
             ''')
 
