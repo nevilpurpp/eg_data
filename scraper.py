@@ -11,9 +11,7 @@ import time
 def db_connection():
     conn = None
     try:
-        conn = sqlite3.connect('egerton_db.db',
-                
-                              )
+        conn = sqlite3.connect('egerton_db.db',)
         return conn
     except sqlite3.Error as e:
         print("Error while connecting to SQLite database:", e)
@@ -37,7 +35,7 @@ def scraper():
         soup = BeautifulSoup(response.content, 'html.parser')
 
         news_highlights = soup.find_all('div', class_='latest-articles')
-    `        news_titles = []
+        news_titles = []
         news_links = []
         news_images = []
         news_dates = []
