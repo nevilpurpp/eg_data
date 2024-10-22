@@ -16,19 +16,21 @@ def trigger_new_notification():
     cur = conn.cursor()
     
     
-    cur.execute("SELECT Title, Intro FROM egerton_news ORDER BY UpdatedDate DESC LIMIT 1")
+    cur.execute("SELECT Title, Intro FROM egerton_news ORDER BY UpdatedDate DESC LIMIT 2")
     row = cur.fetchone()
     
     if row:
-        title, intro = row
+        title, intro, image, link = row
 
-        truncated_intro = intro[:100] + '...' if len(intro) > 100 else intro
+        #truncated_intro = intro[:100] + '...' if len(intro) > 100 else intro
         
         
         message = messaging.Message(
             data={
                 'Title': title,
-                'Intro': truncated_intro,
+                'Intro': intro,
+                'Image_url': image,
+                'Link': link,
                 'MessageId': '1234'  
             },
             topic='notify',
@@ -41,7 +43,7 @@ def trigger_new_notification():
         print("No recent news available.")
     
     conn.close()
-schedule.every(2).minutes.do(trigger_new_notification)
+schedule.every(30).minutes.do(trigger_new_notification)
 while True:
     schedule.run_pending()
     time.sleep(30)
