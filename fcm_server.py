@@ -16,7 +16,7 @@ def trigger_new_notification():
     cur = conn.cursor()
     
     
-    cur.execute("SELECT Title, Intro FROM egerton_news ORDER BY UpdatedDate DESC LIMIT 2")
+    cur.execute("SELECT Title, Intro, Image_url, Link FROM egerton_news ORDER BY UpdatedDate DESC LIMIT 2")
     row = cur.fetchone()
     
     if row:
