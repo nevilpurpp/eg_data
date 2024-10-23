@@ -1,6 +1,7 @@
 from flask import Flask, jsonify
 from scraper import db_connection
 from fcm_server import trigger_new_notification
+import os
 
 
 app = Flask(__name__)
@@ -91,6 +92,6 @@ def index():
 
 
 if __name__ == '__main__':
-    port = int(os.environ.get("PORT", 11201))  
+    port = int(os.environ.get("PORT", 5000))  
     app.run(host="0.0.0.0", port=port)
-    
+
