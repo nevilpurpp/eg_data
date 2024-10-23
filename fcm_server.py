@@ -43,9 +43,11 @@ def trigger_new_notification():
         print("No recent news available.")
     
     conn.close()
-schedule.every(30).minutes.do(trigger_new_notification)
-while True:
-    schedule.run_pending()
-    time.sleep(30)
+trigger_new_notification()    
+    
+#schedule.every(30).minutes.do(trigger_new_notification)
+#while True:
+ #   schedule.run_pending()
+  #  time.sleep(30)
 
 
