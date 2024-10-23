@@ -210,10 +210,10 @@ def scraper():
 
     conn.commit()
     conn.close()
-scraper()
-#schedule.every(1).minutes.do(scraper)
-#while True:
- #   schedule.run_pending()
-  #  time.sleep(20)
+#scraper()
+schedule.every(1).minutes.do(scraper)
+while True:
+    schedule.run_pending()
+    time.sleep(20)
 
 
