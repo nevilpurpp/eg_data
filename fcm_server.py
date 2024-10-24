@@ -16,19 +16,19 @@ def trigger_new_notification():
     cur = conn.cursor()
     
     
-    cur.execute("SELECT Title, Intro, Image_url, Link FROM egerton_news ORDER BY UpdatedDate DESC LIMIT 2")
+    cur.execute("SELECT Title, Intro, Image_url, Link FROM egerton_news ORDER BY UpdatedDate DESC LIMIT 1")
     row = cur.fetchone()
     
     if row:
         title, intro, image, link = row
 
-        #truncated_intro = intro[:100] + '...' if len(intro) > 100 else intro
+        truncated_intro = intro[:150] + '...' if len(intro) > 150 else intro
         
         
         message = messaging.Message(
             data={
                 'Title': title,
-                'Intro': intro,
+                'Intro': truncated_intro,
                 'Image_url': image,
                 'Link': link,
                 'MessageId': '1234'  
