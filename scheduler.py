@@ -5,8 +5,8 @@ from fcm_server import trigger_new_notification
 #scheduler set up
 
 scheduler = BackgroundScheduler()
-scheduler.add_job(scraper, 'interval', minutes=30)
-scheduler.add_job(trigger_new_notification, 'interval', hours= 5)
+scheduler.add_job(scraper, 'interval', minutes=2)
+scheduler.add_job(trigger_new_notification, 'interval', minutes=1)
 if __name__ == '__main__':
     try:
         scheduler.start()
