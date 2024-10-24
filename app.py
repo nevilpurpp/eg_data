@@ -1,6 +1,6 @@
 from flask import Flask, jsonify
 from scraper import db_connection
-from fcm_server import trigger_new_notification
+from scheduler import trigger_new_notification, scraper
 import os
 
 

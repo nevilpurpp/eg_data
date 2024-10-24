@@ -189,7 +189,7 @@ def scraper():
                 'Date': notice_dates,
                 'Article': notice_texts
             })
-
+            cur.execute("DROP TABLE notice_board_news")
             cur.execute('''
               CREATE TABLE IF NOT EXISTS notice_board_news (
                   id INTEGER PRIMARY KEY,
