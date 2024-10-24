@@ -6,3 +6,4 @@ pandas
 gunicorn
 firebase-admin
 schedule
+Flask-APScheduler
