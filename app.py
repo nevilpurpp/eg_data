@@ -2,8 +2,6 @@ from flask import Flask, jsonify
 from scraper import db_connection
 from fcm_server import trigger_new_notification
 import os
-import time
-from apscheduler.schedulers.background import BackgroundScheduler
 
 
 app = Flask(__name__)
@@ -84,7 +82,7 @@ def get_noticeboard():
 
 @app.route('/api/send_recent_news', methods=['POST'])
 def trigger_notification():
-    send_recent_news_notification()
+    trigger_new_notification()
     return jsonify({'message': 'Notification sent successfully'})
 
 # Default route
