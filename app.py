@@ -2,6 +2,8 @@ from flask import Flask, jsonify
 from scraper import db_connection
 from fcm_server import trigger_new_notification
 import os
+import time
+from apscheduler.schedulers.background import BackgroundScheduler
 
 
 app = Flask(__name__)
@@ -89,7 +91,10 @@ def trigger_notification():
 @app.route('/')
 def index():
     return '<h1>Welcome to the Egerton University API</h1>'
-
+#scheduler set-up
+scheduler = BackgroundScheduler()
+scheduler.add_job(trigger_notification, 'interval', minutes=30)
+scheduler.start()
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))  
