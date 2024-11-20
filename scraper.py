@@ -198,7 +198,7 @@ def scraper():
 
 
     recent_news()
-     news_data = news("https://www.egerton.ac.ke/news")
+    news_data = news("https://www.egerton.ac.ke/news")
     news_df = pd.DataFrame(news_data)
     cur.execute("DROP TABLE egerton_news")
     cur.execute('''CREATE TABLE IF NOT EXISTS egerton_news (
