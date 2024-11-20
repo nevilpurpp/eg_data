@@ -79,64 +79,57 @@ def scraper():
 
     
     def news(url):
-        response = requests.get(url)
-        soup = BeautifulSoup(response.content, 'html.parser')
+        current_page = 1
+        has_next_page = True
+        all_news_data = []
+        
+        while has_next_page:
+            url = f"{url}?start={25 * (current_page - 1)}" 
+            response = requests.get(url)
+            response.raise_for_status()
+            soup = BeautifulSoup(response.content, 'html.parser')
 
-        news_articles = soup.find_all('div', class_='w357ui-grid-small ma-article')
-        news_titles = []
-        news_links = []
-        news_images = []
-        news_dates = []
-        news_intros = []
-        news_updated_date = []
+            news_articles = soup.find_all('div', class_='w357ui-grid-small ma-article')
+            news_data = []
 
-        for article in news_articles:
-            title = article.find('h3', class_='w357ui-margin-small-bottom ma-title').find('a').text.strip()
-            link = article.find('h3', class_='w357ui-margin-small-bottom ma-title').find('a')['href'].strip()
+            for article in news_articles:
+                title = article.find('h3', class_='w357ui-margin-small-bottom ma-title').find('a').text.strip()
+                link = article.find('h3', class_='w357ui-margin-small-bottom ma-title').find('a')['href'].strip()
+                full_link = "https://www.egerton.ac.ke" + link
 
-            # Handle None values for image
-            image_tag = article.find('div', class_='ma-image').find('img')
-            image = image_tag['src'].strip() if image_tag else None
-            img2 = "https://www.egerton.ac.ke" + image
+                image_tag = article.find('div', class_='ma-image').find('img')
+                image = image_tag['src'].strip() if image_tag and 'src' in image_tag.attrs else None
+                if image:
+                    full_image_url = "https://www.egerton.ac.ke" + image
+                    try:
+                        image_response = requests.get(full_image_url, stream=True)
+                        image_response.raise_for_status()
+                        filename = os.path.join("images", image.split('/')[-1])
+                        os.makedirs("images", exist_ok=True)
+                        with open(filename, 'wb') as f:
+                            for chunk in image_response.iter_content(chunk_size=8192):
+                                f.write(chunk)
+                    except requests.exceptions.RequestException as e:
+                        print(f"Error downloading image {image}: {e}")
+                        image = None  
 
-            date = article.find('div', class_='ma-date').find('time').text.strip()
-            intro = article.find('div', class_='ma-introtext').text.strip()
-            currentDateTime = datetime.datetime.now()
-            
+                date = article.find('div', class_='ma-date').find('time').text.strip()
+                intro = article.find('div', class_='ma-introtext').text.strip()
+                updated_date = datetime.datetime.now()
 
-            news_titles.append(title)
-            news_intros.append(intro)
-            news_links.append(link)
-            news_images.append(img2)
-            news_dates.append(date)
-            news_updated_date.append(currentDateTime)
-            
+                news_data.append({
+                    'Title': title,
+                    'Link': full_link,
+                    'Image_url': image,
+                    'Date': date,
+                    'Intro': intro,
+                    'UpdatedDate': updated_date
+                })
+            all_news_data.extend(news_data)
+            has_next_page = soup.find('a', class_='next') is not None
+            current_page += 1
 
-
-
-        # News DataFrame
-        news_df = pd.DataFrame({
-            'Title': news_titles,
-            'Intro': news_intros,
-            'Link': news_links,
-            'Image_url': news_images,
-            'Date': news_dates,
-            'UpdatedDate': news_updated_date
-        })
-        cur.execute("DROP TABLE egerton_news")
-        cur.execute('''CREATE TABLE IF NOT EXISTS egerton_news (
-                        id INTEGER PRIMARY KEY, 
-                        Title TEXT,
-                        Intro TEXT,
-                        Image_url STRING,
-                        Link STRING,
-                        Date CHAR(50),
-                        UpdatedDate TIMESTAMP,
-                        UNIQUE ( id, Title, Intro, Image_url, Link, Date, UpdatedDate) ON CONFLICT IGNORE
-                       )''')
-
-        # Save other news to the database
-        news_df.to_sql('egerton_news', conn, if_exists='append', index=False)
+        return all_news_data
 
     # notices section
     def notice_board():
@@ -205,7 +198,20 @@ def scraper():
 
 
     recent_news()
-    news("https://www.egerton.ac.ke/news")
+     news_data = news("https://www.egerton.ac.ke/news")
+    news_df = pd.DataFrame(news_data)
+    cur.execute("DROP TABLE egerton_news")
+    cur.execute('''CREATE TABLE IF NOT EXISTS egerton_news (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    Title TEXT,
+                    Intro TEXT,
+                    Image_url TEXT,
+                    Link TEXT,
+                    Date CHAR(50),
+                    UpdatedDate TIMESTAMP,
+                    UNIQUE(id, Title, Intro, Image_url, Link, Date, UpdatedDate) ON CONFLICT IGNORE
+                   )''')
+    news_df.to_sql('egerton_news', conn, if_exists='append', index=False)
     notice_board()
 
     conn.commit()
