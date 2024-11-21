@@ -151,7 +151,7 @@ def scraper():
                     'Link': full_link,
                     'Format': file_format
                 })
-         return downloads_data
+        return downloads_data
     downloads_df = pd.DataFrame(downloads_data)
     cur.execute("DROP TABLE IF EXISTS downloads")
     cur.execute('''
