@@ -77,7 +77,7 @@ def get_noticeboard():
     conn.close()
     return jsonify(noticeboard)
 
- route to access download links
+# route to access download links
 @app.route('/api/download_links')
 def get_download_links():
     conn = db_connection()
