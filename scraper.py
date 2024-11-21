@@ -1,9 +1,9 @@
 import requests
 from bs4 import BeautifulSoup
-import pandas as pd
 import sqlite3
 import os
 import datetime
+import csv
 
 # Database connection
 def db_connection():
@@ -13,6 +13,15 @@ def db_connection():
     except sqlite3.Error as e:
         print("Error while connecting to SQLite database:", e)
         return None
+
+# Write to CSV
+def write_to_csv(filename, data, headers):
+    file_exists = os.path.isfile(filename)
+    with open(filename, mode='a', newline='', encoding='utf-8') as file:
+        writer = csv.writer(file)
+        if not file_exists:  # Write header only for new files
+            writer.writerow(headers)
+        writer.writerows(data)
 
 # Scraper function
 def scraper():
@@ -54,8 +63,9 @@ def scraper():
                                 UNIQUE (Title, Link, Image_url, Date) ON CONFLICT IGNORE
                                )''')
 
-                news_df = pd.DataFrame(news_data, columns=['Title', 'Link', 'Image_url', 'Date'])
-                news_df.to_sql('recent_egerton_news', conn, if_exists='append', index=False)
+                write_to_csv('recent_egerton_news.csv', news_data, ['Title', 'Link', 'Image_url', 'Date'])
+                cur.executemany('''INSERT OR IGNORE INTO recent_egerton_news (Title, Link, Image_url, Date)
+                                    VALUES (?, ?, ?, ?)''', news_data)
             except requests.RequestException as e:
                 print("Error fetching recent news:", e)
 
@@ -105,8 +115,9 @@ def scraper():
                             UNIQUE (Title, Intro, Image_url, Link, Date) ON CONFLICT IGNORE
                            )''')
 
-            news_df = pd.DataFrame(all_news_data, columns=['Title', 'Intro', 'Image_url', 'Link', 'Date', 'UpdatedDate'])
-            news_df.to_sql('egerton_news', conn, if_exists='append', index=False)
+            write_to_csv('egerton_news.csv', all_news_data, ['Title', 'Intro', 'Image_url', 'Link', 'Date', 'UpdatedDate'])
+            cur.executemany('''INSERT OR IGNORE INTO egerton_news (Title, Intro, Image_url, Link, Date, UpdatedDate)
+                                VALUES (?, ?, ?, ?, ?, ?)''', all_news_data)
 
         # Scrape downloads
         def downloads():
@@ -135,8 +146,9 @@ def scraper():
                                 UNIQUE (Title, Link) ON CONFLICT IGNORE
                                )''')
 
-                downloads_df = pd.DataFrame(downloads_data, columns=['Title', 'Link', 'Format'])
-                downloads_df.to_sql('downloads', conn, if_exists='append', index=False)
+                write_to_csv('downloads.csv', downloads_data, ['Title', 'Link', 'Format'])
+                cur.executemany('''INSERT OR IGNORE INTO downloads (Title, Link, Format)
+                                    VALUES (?, ?, ?)''', downloads_data)
             except requests.RequestException as e:
                 print("Error fetching downloads:", e)
 
@@ -177,8 +189,9 @@ def scraper():
                                     UNIQUE (Title, Date, Article) ON CONFLICT IGNORE
                                    )''')
 
-                    notice_df = pd.DataFrame(notice_data, columns=['Title', 'Date', 'Article'])
-                    notice_df.to_sql('notice_board_news', conn, if_exists='append', index=False)
+                    write_to_csv('notice_board_news.csv', notice_data, ['Title', 'Date', 'Article'])
+                    cur.executemany('''INSERT OR IGNORE INTO notice_board_news (Title, Date, Article)
+                                        VALUES (?, ?, ?)''', notice_data)
             except requests.RequestException as e:
                 print("Error fetching notice board:", e)
 
