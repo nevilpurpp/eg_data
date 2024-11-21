@@ -77,8 +77,25 @@ def get_noticeboard():
     conn.close()
     return jsonify(noticeboard)
 
-# Todo:: route to access download links
-#@app.route('/api/download-links')
+ route to access download links
+@app.route('/api/download_links')
+def get_download_links():
+    conn = db_connection()
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM downloads")
+    rows = cur.fetchall()
+    
+    downloads = []
+    for row in rows:
+        downloads.append({
+            'id': row[0],
+            'Title': row[1],
+            'Link': row[2],
+            'Format': row[3]
+        })
+    conn.close()
+    return jsonify(downloads)
+    
 
 @app.route('/api/send_recent_news', methods=['POST'])
 def trigger_notification():
