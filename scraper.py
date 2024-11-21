@@ -131,6 +131,39 @@ def scraper():
 
         return all_news_data
 
+    def downloads():
+        url = "https://www.egerton.ac.ke/studentdownloads"
+        response = requests.get(url)
+        soup = BeautifulSoup(response.content, "html.parser")
+
+        download_items = soup.find_all('ul', class_='nav menu egerton-padding mod-list')
+        downloads_data = []
+
+        for items in download_items:
+            for link in items.find_all('a'):
+                title = link.text.strip()
+                href = link.get('href').strip()
+                full_link = "https://www.egerton.ac.ke" + href
+                file_format = os.path.splitext(href)[1]
+
+                downloads_data.append({
+                    'Title': title,
+                    'Link': full_link,
+                    'Format': file_format
+                })
+    downloads_df = pd.DataFrame(downloads_data)
+    cur.execute("DROP TABLE IF EXISTS downloads")
+    cur.execute('''
+        CREATE TABLE IF NOT EXISTS downloads (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            Title TEXT,
+            Link TEXT,
+            Format TEXT
+        )
+    ''')
+    downloads_df.to_sql('downloads', conn, if_exists='append', index=False)
+
+
     # notices section
     def notice_board():
         url = "https://www.egerton.ac.ke/"
