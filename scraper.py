@@ -16,12 +16,16 @@ def db_connection():
 
 # Write to CSV
 def write_to_csv(filename, data, headers):
-    file_exists = os.path.isfile(filename)
-    with open(filename, mode='a', newline='', encoding='utf-8') as file:
+    temp_path = os.path.join("/tmp", filename)
+    
+    # Check if the file already exists
+    file_exists = os.path.isfile(temp_path)
+    
+    with open(temp_path, mode='a', newline='', encoding='utf-8') as file:
         writer = csv.writer(file)
-        if not file_exists:  # Write header only for new files
-            writer.writerow(headers)
-        writer.writerows(data)
+        if not file_exists:
+            writer.writerow(headers)  
+        writer.writerows(data) 
 
 # Scraper function
 def scraper():
@@ -63,7 +67,7 @@ def scraper():
                                 UNIQUE (Title, Link, Image_url, Date) ON CONFLICT IGNORE
                                )''')
 
-                #write_to_csv('recent_egerton_news.csv', news_data, ['Title', 'Link', 'Image_url', 'Date'])
+                write_to_csv('recent_egerton_news.csv', news_data, ['Title', 'Link', 'Image_url', 'Date'])
                 cur.executemany('''INSERT OR IGNORE INTO recent_egerton_news (Title, Link, Image_url, Date)
                                     VALUES (?, ?, ?, ?)''', news_data)
             except requests.RequestException as e:
@@ -115,7 +119,7 @@ def scraper():
                             UNIQUE (Title, Intro, Image_url, Link, Date) ON CONFLICT IGNORE
                            )''')
 
-           # write_to_csv('egerton_news.csv', all_news_data, ['Title', 'Intro', 'Image_url', 'Link', 'Date', 'UpdatedDate'])
+            write_to_csv('egerton_news.csv', all_news_data, ['Title', 'Intro', 'Image_url', 'Link', 'Date', 'UpdatedDate'])
             cur.executemany('''INSERT OR IGNORE INTO egerton_news (Title, Intro, Image_url, Link, Date, UpdatedDate)
                                 VALUES (?, ?, ?, ?, ?, ?)''', all_news_data)
 
@@ -146,7 +150,7 @@ def scraper():
                                 UNIQUE (Title, Link) ON CONFLICT IGNORE
                                )''')
 
-                #write_to_csv('downloads.csv', downloads_data, ['Title', 'Link', 'Format'])
+                write_to_csv('downloads.csv', downloads_data, ['Title', 'Link', 'Format'])
                 cur.executemany('''INSERT OR IGNORE INTO downloads (Title, Link, Format)
                                     VALUES (?, ?, ?)''', downloads_data)
             except requests.RequestException as e:
@@ -189,7 +193,7 @@ def scraper():
                                     UNIQUE (Title, Date, Article) ON CONFLICT IGNORE
                                    )''')
 
-                    #write_to_csv('notice_board_news.csv', notice_data, ['Title', 'Date', 'Article'])
+                    write_to_csv('notice_board_news.csv', notice_data, ['Title', 'Date', 'Article'])
                     cur.executemany('''INSERT OR IGNORE INTO notice_board_news (Title, Date, Article)
                                         VALUES (?, ?, ?)''', notice_data)
             except requests.RequestException as e:
