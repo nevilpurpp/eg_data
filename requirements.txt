@@ -6,3 +6,5 @@ gunicorn
 firebase-admin
 schedule
 Flask-APScheduler
+pyjwt 
+supabase-py
