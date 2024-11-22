@@ -1,105 +1,91 @@
 from flask import Flask, jsonify
-from scraper import db_connection
-from scheduler import trigger_new_notification, scraper
+from supabase import create_client, Client
 import os
+from scraper import supabase_client
 
 
 app = Flask(__name__)
 application = app
 
-#route to access news
+# Route to access news
 @app.route('/api/news', methods=['GET'])
 def get_news():
-    conn = db_connection()
-    cur = conn.cursor()
-    cur.execute("SELECT * FROM egerton_news")
-    rows = cur.fetchall()
-
-
-    news = []
-    for row in rows:
-        news.append({
-            'id': row[0],
-            'Title': row[1],
-            'Intro': row[2],
-            'Image_url': row[3],
-            'Link': row[4],
-            'Date': row[5]
-        })
-    conn.close()
-    return jsonify(news)    
-
-
+    try:
+        response = supabase.table("egerton_news").select("*").execute()
+        news = [
+            {
+                'id': row['id'],
+                'Title': row['Title'],
+                'Intro': row['Intro'],
+                'Image_url': row['Image_url'],
+                'Link': row['Link'],
+                'Date': row['Date']
+            }
+            for row in response.data
+        ]
+        return jsonify(news)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 # Route to access recent news
 @app.route('/api/recent_news', methods=['GET'])
 def get_recent_news():
-    conn = db_connection()
-    cur = conn.cursor()
-    cur.execute("SELECT * FROM recent_egerton_news")
-    rows = cur.fetchall()
+    try:
+        response = supabase.table("recent_egerton_news").select("*").execute()
+        recent_news = [
+            {
+                'id': row['id'],
+                'Title': row['Title'],
+                'Link': row['Link'],
+                'Image_url': row['Image_url'],
+                'Date': row['Date']
+            }
+            for row in response.data
+        ]
+        return jsonify(recent_news)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
-    
-    recent_news = []
-    for row in rows:
-        recent_news.append({
-            'id': row[0],
-            'Title': row[1],
-            'Link': row[3],
-            'Image_url': row[2],
-            'Date': row[4]
-        })
-
-    conn.close()
-    return jsonify(recent_news)
-
-
-
-#route to access noticeboard
-
+# Route to access noticeboard
 @app.route('/api/noticeboard', methods=['GET'])
 def get_noticeboard():
-    conn = db_connection()
-    cur = conn.cursor()
-    cur.execute("SELECT * FROM notice_board_news")
-    rows = cur.fetchall()
+    try:
+        response = supabase.table("notice_board_news").select("*").execute()
+        noticeboard = [
+            {
+                'id': row['id'],
+                'Title': row['Title'],
+                'Date': row['Date'],
+                'Article': row['Article']
+            }
+            for row in response.data
+        ]
+        return jsonify(noticeboard)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
-
-    noticeboard = []
-    for row in rows:
-        noticeboard.append({
-            'id': row[0],
-            'Title': row[1],
-            'Date': row[2],
-            'Article': row[3]
-        })
-
-    conn.close()
-    return jsonify(noticeboard)
-
-# route to access download links
-@app.route('/api/download_links')
+# Route to access download links
+@app.route('/api/download_links', methods=['GET'])
 def get_download_links():
-    conn = db_connection()
-    cur = conn.cursor()
-    cur.execute("SELECT * FROM downloads")
-    rows = cur.fetchall()
-    
-    downloads = []
-    for row in rows:
-        downloads.append({
-            'id': row[0],
-            'Title': row[1],
-            'Link': row[2],
-            'Format': row[3]
-        })
-    conn.close()
-    return jsonify(downloads)
-    
+    try:
+        response = supabase.table("downloads").select("*").execute()
+        downloads = [
+            {
+                'id': row['id'],
+                'Title': row['Title'],
+                'Link': row['Link'],
+                'Format': row['Format']
+            }
+            for row in response.data
+        ]
+        return jsonify(downloads)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
+# Route to send recent news notifications
 @app.route('/api/send_recent_news', methods=['POST'])
 def trigger_notification():
-    trigger_new_notification()
+    # Implement your notification logic here
     return jsonify({'message': 'Notification sent successfully'})
 
 # Default route
@@ -107,8 +93,6 @@ def trigger_notification():
 def index():
     return '<h1>Welcome to the Egerton University API</h1>'
 
-
 if __name__ == '__main__':
-    port = int(os.environ.get("PORT", 5000))  
+    port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
-

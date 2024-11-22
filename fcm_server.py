@@ -1,53 +1,58 @@
 import firebase_admin
 from firebase_admin import credentials, messaging
-from scraper import db_connection
-#import schedule
-#import time
+from supabase import create_client, Client
+import os
+from scraper import supabase_client
 
-firebase_credentials_path = "/etc/secrets/egertonapp-firebase-adminsdk-sghjd-ab5f380ca5.json"
-cred = credentials.Certificate(firebase_credentials_path)
-firebase_admin.initialize_app(cred)
+# Initialize Firebase Admin
 
+firebase_credentials = os.getenv("FIREBASE_ADMIN_CREDENTIALS")
 
+if firebase_credentials:
+    firebase_credentials_dict = json.loads(firebase_credentials)
+    cred = credentials.Certificate(firebase_credentials_dict)
+    firebase_admin.initialize_app(cred)
+else:
+    raise ValueError("Firebase credentials are not set in the environment variables")
 
 
 def trigger_new_notification():
-    conn = db_connection()
-    cur = conn.cursor()
-    
-    
-    cur.execute("SELECT Title, Intro, Image_url, Link FROM egerton_news ORDER BY UpdatedDate DESC LIMIT 1")
-    row = cur.fetchone()
-    
-    if row:
-        title, intro, image, link = row
+    try:
+        # Fetch the most recent news
+        response = supabase.table("egerton_news").select(
+            "Title, Intro, Image_url, Link"
+        ).order("UpdatedDate", desc=True).limit(1).execute()
 
-        truncated_intro = intro[:150] + '...' if len(intro) > 150 else intro
-        
-        
-        message = messaging.Message(
-            data={
-                'Title': title,
-                'Intro': truncated_intro,
-                'Image_url': image,
-                'Link': link,
-                'MessageId': '1234'  
-            },
-            topic='notify',
-        )
+        if response.data:
+            latest_news = response.data[0]  # Get the first record
+            title = latest_news['Title']
+            intro = latest_news['Intro']
+            image = latest_news['Image_url']
+            link = latest_news['Link']
 
-        # Send the notification
-        response = messaging.send(message)
-        print('Successfully sent message:', response)
-    else:
-        print("No recent news available.")
-    
-    conn.close()
-trigger_new_notification()    
-    
-#schedule.every(30).minutes.do(trigger_new_notification)
-#while True:
- #   schedule.run_pending()
-  #  time.sleep(30)
+            # Truncate the introduction if necessary
+            truncated_intro = intro[:150] + '...' if len(intro) > 150 else intro
+
+            # Create the notification message
+            message = messaging.Message(
+                data={
+                    'Title': title,
+                    'Intro': truncated_intro,
+                    'Image_url': image,
+                    'Link': link,
+                    'MessageId': '1234'  # Replace with a dynamic ID if needed
+                },
+                topic='notify',
+            )
+
+            # Send the notification
+            response = messaging.send(message)
+            print('Successfully sent message:', response)
+        else:
+            print("No recent news available.")
+    except Exception as e:
+        print(f"An error occurred: {e}")
 
 
+# Trigger the notification
+trigger_new_notification()
