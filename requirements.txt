@@ -7,5 +7,5 @@ firebase-admin
 schedule
 Flask-APScheduler
 pyjwt 
-supabase-py
+supabase
 Werkzeug==2.3.6
