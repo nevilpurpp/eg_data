@@ -1,10 +1,11 @@
 beautifulsoup4
 Pillow
 requests
-flask
+flask >= 2.3.2
 gunicorn
 firebase-admin
 schedule
 Flask-APScheduler
 pyjwt 
 supabase-py
+Werkzeug >= 2.3.6
