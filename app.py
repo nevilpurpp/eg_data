@@ -85,7 +85,7 @@ def get_download_links():
 # Route to send recent news notifications
 @app.route('/api/send_recent_news', methods=['POST'])
 def trigger_notification():
-    # Implement your notification logic here
+    
     return jsonify({'message': 'Notification sent successfully'})
 
 # Default route
@@ -94,5 +94,5 @@ def index():
     return '<h1>Welcome to the Egerton University API</h1>'
 
 if __name__ == '__main__':
-    port = int(os.environ.get("PORT", 8080))
-    app.run(host="0.0.0.0", port=port)
+   
+    app.run()
